@@ -5,6 +5,7 @@ import br.com.brunosalata.cardapio.food.FoodRepository;
 import br.com.brunosalata.cardapio.food.FoodRequestDTO;
 import br.com.brunosalata.cardapio.food.FoodResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,16 +23,16 @@ public class FoodController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping         // Método GET no Endopoint "food"
-    public List<FoodResponseDTO> getAll(){
-        List<FoodResponseDTO> foodList = repository.findAll().stream().map(FoodResponseDTO::new).toList();
-        return foodList;
+    public ResponseEntity getAllFoods(){
+        List<FoodResponseDTO> foodList = this.repository.findAll().stream().map(FoodResponseDTO::new).toList();
+        return ResponseEntity.ok(foodList);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
-    public void saveFood(@RequestBody FoodRequestDTO data){
+    public ResponseEntity saveFood(@RequestBody FoodRequestDTO data){
         Food foodData = new Food(data);
-        repository.save(foodData);
-        return;
+        this.repository.save(foodData);
+        return ResponseEntity.ok().build();
     }
 }
